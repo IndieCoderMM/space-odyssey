@@ -2,29 +2,34 @@ class Asteroid
   attr_reader :rect
 
   def initialize
-    @x = rand($window_width)
-    @y = [-30, $window_height + 30].sample
-    @vx = rand(-0.5..0.5)
-    @vy = @y > $window_height ? rand(-0.5..-0.2) : rand(0.2..0.5)
+    @x = 0
+    @y = 0
+    @vx = 0
+    @vy = 0
     @angle = 0
     @size = 80
     @image = "assets/meteor#{rand(1..4)}.png"
     @rect = { x: @x, y: @y, width: @size, height: @size }
+    respawn
   end
 
   def draw
     Image.new(@image, x: @x, y: @y, width: @size, height: @size, rotate: @angle)
   end
 
+  def respawn
+    @x = rand($window_width)
+    @y = [-@size, $window_height + @size].sample
+    @vx = rand(-1..1)
+    @vy = @y > $window_height ? rand(-0.5..-0.2) : rand(0.2..0.5)
+  end
+
   def update
     @x += @vx
     @y += @vy
     @angle += 0.5
-    if @x.negative? || @x > $window_width
-      @x = rand($window_width)
-      @y = [-@size, $window_height + @size].sample
-      @vx = rand(-0.5..0.5)
-      @vy = @y > $window_height ? rand(-0.5..-0.2) : rand(0.2..0.5)
+    if @x < -@size || @x > $window_width + @size || @y < -@size * 2 || @y > $window_height + @size * 2
+      respawn
     end
 
     @angle = 0 if @angle > 359
