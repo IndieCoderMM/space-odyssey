@@ -5,23 +5,26 @@ require_relative "./network"
 IMG_PATH = 'assets/ship_green.png'.freeze
 
 class Ship
-  attr_accessor :v_x, :v_y, :angle, :moving
+  attr_accessor :controls
   attr_reader :x, :y, :width, :height
 
-  def initialize(x, y)
+  MAX_SPEED = 3
+  ACCELERATION = 0.2
+  FRICTION = 0.1
+
+  def initialize(x, y, width, height)
     @x = x
     @y = y
+    @width = width
+    @height = height
     @angle = 0
     @speed = 5
-    @v_x = 0
-    @v_y = 0
-    @width = 100
-    @height = 80
-    @moving = false
-    @rect = { x: @x, y: @y, width: @width, height: @height }
     @img = nil
+
+    @controls = {forward: false, left: false, right: false}
+    @rect = { x: @x, y: @y, width: @width, height: @height }
     @sensor = Sensor.new(self, ray_count: 4)
-    @brain = NeuralNetwork.new([@sensor.ray_count, 4, 4])
+    @brain = NeuralNetwork.new([@sensor.ray_count, 4, 3])
   end
 
   def draw
@@ -30,11 +33,22 @@ class Ship
     # Circle.new(x: @x + @width /2 , y: @y + @height /2, color: 'blue', radius: 10)
   end
 
-  def move 
-    direction = @angle * Math::PI / 180
+  def angle_radians
+    @angle * Math::PI / 180
+  end
 
-    @x += @speed * Math.sin(direction)
-    @y -= @speed * Math.cos(direction)
+  def move 
+    @speed += ACCELERATION if @controls[:forward]
+    @speed -= FRICTION
+    
+    @angle += 1 if @controls[:right]
+    @angle -= 1 if @controls[:left]
+
+    @speed = [0, @speed, MAX_SPEED].sort[1]
+    # @angle = [0, @angle, 360].sort[1]
+    angle = angle_radians
+    @x += @speed * Math.sin(angle)
+    @y -= @speed * Math.cos(angle)
 
     @rect[:x] = @x
     @rect[:y] = @y
@@ -46,11 +60,11 @@ class Ship
 
     offsets = @sensor.readings.map {|d| d.nil? ? 0 : 1 - d[:offset]}
     outputs = NeuralNetwork.feed_forward(offsets, @brain)
-    puts outputs.to_s
-    
-    @moving = outputs[0] == 1
+    # puts outputs.to_s
+    # @controls[:forward] = outputs[0]
+    # @controls[:left] = outputs[1]
+    # @controls[:right] = outputs[2]
 
-    return unless @moving
     move 
   end
 

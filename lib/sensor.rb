@@ -24,7 +24,7 @@ class Sensor
   # Line = [{x: 0, y: 0}, {x: 1, y: 1}]
   def cast_rays
     @rays = []
-    ship_dir = @ship.angle * Math::PI / 180
+    ship_dir = @ship.angle_radians
     @ray_count.times do |i|
       ray_angle = lerp(@ray_spread / 2, -@ray_spread/2, i.to_f/(@ray_count - 1)) - ship_dir
       start_pt = {x: @ship.x + @ship.width/2, y: @ship.y + @ship.height/2}
