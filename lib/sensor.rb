@@ -1,11 +1,13 @@
 require_relative "./utils"
 
 class Sensor
-  def initialize(ship, ray_count: 10, ray_length: 200)
+  attr_reader :ray_count, :readings
+
+  def initialize(ship, ray_count: 10, ray_length: 200, ray_spread: Math::PI / 2)
     @ship = ship 
     @ray_count = ray_count
     @ray_length = ray_length
-    @ray_spread = Math::PI / 2 + Math::PI
+    @ray_spread = ray_spread
     @rays = []
     @readings = []
   end
