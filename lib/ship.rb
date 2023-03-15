@@ -1,12 +1,12 @@
 require_relative './utils'
-require_relative "./sensor"
-require_relative "./network"
+require_relative './sensor'
+require_relative './network'
 
 IMG_PATH = 'assets/ship_green.png'.freeze
 
 class Ship
   attr_accessor :controls
-  attr_reader :x, :y, :width, :height
+  attr_reader :x, :y, :width, :height, :brain
 
   MAX_SPEED = 3
   ACCELERATION = 0.2
@@ -21,7 +21,7 @@ class Ship
     @speed = 5
     @img = nil
 
-    @controls = {forward: false, left: false, right: false}
+    @controls = { forward: false, left: false, right: false }
     @rect = { x: @x, y: @y, width: @width, height: @height }
     @sensor = Sensor.new(self, ray_count: 4)
     @brain = NeuralNetwork.new([@sensor.ray_count, 4, 3])
@@ -37,10 +37,10 @@ class Ship
     @angle * Math::PI / 180
   end
 
-  def move 
+  def move
     @speed += ACCELERATION if @controls[:forward]
     @speed -= FRICTION
-    
+
     @angle += 1 if @controls[:right]
     @angle -= 1 if @controls[:left]
 
@@ -58,14 +58,14 @@ class Ship
     @img.color = 'red' if is_collision?(asteroids)
     @sensor.update(borders, asteroids)
 
-    offsets = @sensor.readings.map {|d| d.nil? ? 0 : 1 - d[:offset]}
+    offsets = @sensor.readings.map { |d| d.nil? ? 0 : 1 - d[:offset] }
     outputs = NeuralNetwork.feed_forward(offsets, @brain)
     # puts outputs.to_s
     # @controls[:forward] = outputs[0]
     # @controls[:left] = outputs[1]
     # @controls[:right] = outputs[2]
 
-    move 
+    move
   end
 
   def jump

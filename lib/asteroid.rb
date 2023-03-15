@@ -28,9 +28,7 @@ class Asteroid
     @x += @vx
     @y += @vy
     @angle += 0.5
-    if @x < -@size || @x > $window_width + @size || @y < -@size * 2 || @y > $window_height + @size * 2
-      respawn
-    end
+    respawn if @x < -@size || @x > $window_width + @size || @y < -@size * 2 || @y > $window_height + (@size * 2)
 
     @angle = 0 if @angle > 359
     @rect[:x] = @x
