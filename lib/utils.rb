@@ -32,6 +32,10 @@ end
 def rect_collide?(rect1, rect2)
   points1 = convert_rect_to_points(rect1)
   points2 = convert_rect_to_points(rect2)
+  poly_intersect?(points1, points2)
+end
+
+def poly_intersect?(points1, points2)
   points1.length.times do |i|
     points2.length.times do |j|
       intersect = get_intersect(points1[i], points1[(i + 1) % points1.length], points2[j],

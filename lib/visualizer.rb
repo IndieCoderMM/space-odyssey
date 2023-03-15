@@ -7,7 +7,7 @@ HEIGHT = 200
 
 class Visualizer
   def self.draw_network(network)
-    layer_gap = WIDTH / network.layers.length 
+    layer_gap = WIDTH / network.layers.length
 
     (0...network.layers.length).each do |i|
       x = LEFT + lerp(0, WIDTH - layer_gap, i.to_f / (network.layers.length - 1))
@@ -44,7 +44,7 @@ class Visualizer
     Circle.new(
       x: x, y: y,
       radius: radius + 2,
-      color: "navy"
+      color: 'navy'
     )
     Circle.new(
       x: x, y: y,
@@ -52,7 +52,6 @@ class Visualizer
     )
   end
 
-  
   def self.get_node_y(nodes, index, min_y, max_y)
     lerp(min_y, max_y, index.to_f / (nodes.length - 1))
   end

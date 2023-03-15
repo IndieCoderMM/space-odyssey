@@ -6,11 +6,11 @@ IMG_PATH = 'assets/ship_green.png'.freeze
 
 class Ship
   attr_accessor :controls
-  attr_reader :x, :y, :width, :height, :brain
+  attr_reader :x, :y, :width, :height, :brain, :damaged
 
-  MAX_SPEED = 3
-  ACCELERATION = 0.2
-  FRICTION = 0.1
+  MAX_SPEED = 2
+  ACCELERATION = 0.1
+  FRICTION = 0.05
 
   def initialize(x, y, width, height)
     @x = x
@@ -18,18 +18,20 @@ class Ship
     @width = width
     @height = height
     @angle = 0
-    @speed = 5
+    @speed = 0
     @img = nil
+    @damaged = false
 
     @controls = { forward: false, left: false, right: false }
     @rect = { x: @x, y: @y, width: @width, height: @height }
-    @sensor = Sensor.new(self, ray_count: 4)
-    @brain = NeuralNetwork.new([@sensor.ray_count, 4, 3])
+    @sensor = Sensor.new(self, ray_count: 10, ray_spread: Math::PI + (Math::PI / 2))
+    @brain = NeuralNetwork.new([@sensor.ray_count, 5, 3])
   end
 
-  def draw
-    @sensor.draw
+  def draw(sensor: false)
+    @sensor.draw if sensor
     @img = Image.new(IMG_PATH, x: @x, y: @y, width: @width, height: @height, rotate: @angle)
+    @img.color = 'red' if @damaged
     # Circle.new(x: @x + @width /2 , y: @y + @height /2, color: 'blue', radius: 10)
   end
 
@@ -55,17 +57,24 @@ class Ship
   end
 
   def update(borders, asteroids)
-    @img.color = 'red' if is_collision?(asteroids)
+    return if @damaged
+
     @sensor.update(borders, asteroids)
 
     offsets = @sensor.readings.map { |d| d.nil? ? 0 : 1 - d[:offset] }
+    # print offsets
     outputs = NeuralNetwork.feed_forward(offsets, @brain)
     # puts outputs.to_s
-    # @controls[:forward] = outputs[0]
-    # @controls[:left] = outputs[1]
-    # @controls[:right] = outputs[2]
+    @controls[:forward] = outputs[0] == 1
+    @controls[:left] = outputs[1] == 1
+    @controls[:right] = outputs[2] == 1
 
     move
+    @damaged = collides?(asteroids) || out_of_bound?
+  end
+
+  def out_of_bound?
+    @x < -@width || @x > $window_width + @width || @y < -@height || @y > $window_height + @height
   end
 
   def jump
@@ -75,7 +84,7 @@ class Ship
     @y = rand_y
   end
 
-  def is_collision?(asteroids)
+  def collides?(asteroids)
     asteroids.each do |asteroid|
       return true if rect_collide?(@rect, asteroid.rect)
     end

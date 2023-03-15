@@ -15,12 +15,12 @@ class Layer
   def self.randomize(layer)
     layer.inputs.length.times do |i|
       layer.outputs.length.times do |j|
-        layer.weights[i][j] = rand() * 2 - 1
+        layer.weights[i][j] = (rand * 2) - 1
       end
     end
 
     layer.biases.length.times do |i|
-      layer.biases[i] = rand() * 2 - 1
+      layer.biases[i] = (rand * 2) - 1
     end
   end
 

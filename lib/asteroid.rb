@@ -7,7 +7,7 @@ class Asteroid
     @vx = 0
     @vy = 0
     @angle = 0
-    @size = 80
+    @size = 60
     @image = "assets/meteor#{rand(1..4)}.png"
     @rect = { x: @x, y: @y, width: @size, height: @size }
     respawn
@@ -21,7 +21,7 @@ class Asteroid
     @x = rand($window_width)
     @y = [-@size, $window_height + @size].sample
     @vx = rand(-1..1)
-    @vy = @y > $window_height ? rand(-0.5..-0.2) : rand(0.2..0.5)
+    @vy = @y > $window_height ? rand(-1..-0.5) : rand(0.5..1)
   end
 
   def update
