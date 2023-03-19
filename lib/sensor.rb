@@ -10,6 +10,10 @@ class Sensor
     @ray_spread = ray_spread
     @rays = []
     @readings = []
+    @line_drawings = []
+    @ray_count.times do |i|
+      @line_drawings << Line.new 
+    end
   end
 
   def update(borders, asteroids)
@@ -68,21 +72,30 @@ class Sensor
     touches.select { |t| t[:offset] == min_offset }[0]
   end
 
+  def draw_line(index, x1:, y1:, x2:, y2:, color:)
+    @line_drawings[index].x1 = x1
+    @line_drawings[index].x2 = x2
+    @line_drawings[index].y1 = y1
+    @line_drawings[index].y2 = y2
+    @line_drawings[index].color = color 
+  end
+
+
   def draw
     return if @rays.length === 0
 
     @ray_count.times do |i|
       end_point = @readings[i] || @rays[i][1]
-      Line.new(
+      draw_line(i,
         x1: @rays[i][0][:x], y1: @rays[i][0][:y],
         x2: end_point[:x], y2: end_point[:y],
         color: 'yellow'
       )
-      Line.new(
-        x1: @rays[i][1][:x], y1: @rays[i][1][:y],
-        x2: end_point[:x], y2: end_point[:y],
-        color: 'red'
-      )
+      # draw_line(i,
+      #   x1: @rays[i][1][:x], y1: @rays[i][1][:y],
+      #   x2: end_point[:x], y2: end_point[:y],
+      #   color: 'red'
+      # )
     end
   end
 end

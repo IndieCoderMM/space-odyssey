@@ -1,37 +1,43 @@
-class Asteroid
+# WIN_WIDTH = 1200
+# WIN_HEIGHT = 800
+
+class Asteroid < Image
   attr_reader :rect
+  SIZE = 60
 
   def initialize
-    @x = 0
-    @y = 0
+    img_path = "assets/meteor#{rand(1..4)}.png"
+    x = 0
+    y = 0
+    super(img_path, x: x, y: y, width: SIZE, height: SIZE)
+    @rect = { x: x, y: y, width: SIZE, height: SIZE }
+    @color = Color.new('random')
     @vx = 0
     @vy = 0
-    @angle = 0
-    @size = 60
-    @image = "assets/meteor#{rand(1..4)}.png"
-    @rect = { x: @x, y: @y, width: @size, height: @size }
     respawn
   end
 
   def draw
-    Image.new(@image, x: @x, y: @y, width: @size, height: @size, rotate: @angle)
+    # Image.new(@image, x: self.x, y: self.y, width: SIZE, height: SIZE, rotate: @angle)
+    # Square.new(x: self.x, y: self.y, size: SIZE, color: @color)
   end
 
   def respawn
-    @x = rand($window_width)
-    @y = [-@size, $window_height + @size].sample
-    @vx = rand(-1..1)
-    @vy = @y > $window_height ? rand(-1..-0.5) : rand(0.5..1)
+    self.x = rand(WIN_WIDTH)
+    self.y = [-SIZE, WIN_HEIGHT + SIZE].sample
+    @vx = rand(-5..5)
+    @vy = rand(1..3)
+    @vy *= -1 if self.y > WIN_HEIGHT
+    @rect[:x] = self.x
+    @rect[:y] = self.y
   end
 
   def update
-    @x += @vx
-    @y += @vy
-    @angle += 0.5
-    respawn if @x < -@size || @x > $window_width + @size || @y < -@size * 2 || @y > $window_height + (@size * 2)
-
-    @angle = 0 if @angle > 359
-    @rect[:x] = @x
-    @rect[:y] = @y
+    self.x += @vx
+    self.y += @vy
+    self.rotate += 1
+    respawn if self.x < -SIZE || self.x > WIN_WIDTH + SIZE || self.y < -SIZE || self.y > WIN_HEIGHT + SIZE
+    @rect[:x] = self.x
+    @rect[:y] = self.y
   end
 end
