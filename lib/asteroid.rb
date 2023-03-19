@@ -3,7 +3,7 @@
 
 class Asteroid < Image
   attr_reader :rect
-  SIZE = 60
+  SIZE = 100
 
   def initialize
     img_path = "assets/meteor#{rand(1..4)}.png"
@@ -15,11 +15,6 @@ class Asteroid < Image
     @vx = 0
     @vy = 0
     respawn
-  end
-
-  def draw
-    # Image.new(@image, x: self.x, y: self.y, width: SIZE, height: SIZE, rotate: @angle)
-    # Square.new(x: self.x, y: self.y, size: SIZE, color: @color)
   end
 
   def respawn

@@ -11,9 +11,17 @@ class Sensor
     @rays = []
     @readings = []
     @line_drawings = []
-    @ray_count.times do |i|
-      @line_drawings << Line.new 
+    init_drawings
+  end
+
+  def init_drawings
+    (@ray_count*2).times do |i|
+      @line_drawings << Line.new(x1: 0, y1: 0, x2: 0, y2: 0)
     end
+  end
+
+  def clear_drawings
+    @line_drawings.each {|line| line.remove}
   end
 
   def update(borders, asteroids)
@@ -42,7 +50,7 @@ class Sensor
 
   # Finds the closest intersection
   # @param ray [Array of 2 points] -> [{x1, y1}, {x2, y2}]
-  # @param borders [Array of 2 lines]
+  # @param borders [Array of 4 lines]
   # @param asteroids [Array of asteroids]
   # @return intersect point with min offset -> {x, y, offset}
   def get_reading(ray, borders, asteroids)
@@ -68,7 +76,6 @@ class Sensor
 
     offsets = touches.map { |t| t[:offset] }
     min_offset = offsets.min
-    # puts "Min offset: #{min_offset}"
     touches.select { |t| t[:offset] == min_offset }[0]
   end
 
@@ -91,11 +98,11 @@ class Sensor
         x2: end_point[:x], y2: end_point[:y],
         color: 'yellow'
       )
-      # draw_line(i,
-      #   x1: @rays[i][1][:x], y1: @rays[i][1][:y],
-      #   x2: end_point[:x], y2: end_point[:y],
-      #   color: 'red'
-      # )
+      draw_line(i + @ray_count,
+        x1: @rays[i][1][:x], y1: @rays[i][1][:y],
+        x2: end_point[:x], y2: end_point[:y],
+        color: 'red'
+      )
     end
   end
 end

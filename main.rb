@@ -16,30 +16,38 @@ borders = [
   [{ x: 10, y: 10 }, { x: Window.width - 10, y: 10 }],
   [{ x: 10, y: Window.height - 10 }, { x: Window.width - 10, y: Window.height - 10 }]
 ]
-ships = Array.new(5) { Ship.new(Window.width / 2, Window.height / 2, 80, 50) }
-asteroids = Array.new(5) { Asteroid.new }
+ships = Array.new(50) { Ship.new(Window.width / 2, Window.height / 2, 80, 50) }
+asteroids = Array.new(10) { Asteroid.new }
 visualizer = Visualizer.new(ships[0].brain)
 gen = 1
 
-fps_display = Text.new("FPS: #{get(:fps).round(2)}", x: 10, y: 10)
-gen_display = Text.new("GEN: #{gen}", x: 10, y: 30)
+fps_display = Text.new("FPS: 30", x: 10, y: 10)
+gen_display = Text.new("GEN: 0", x: 10, y: 30)
 
 update do
+  damaged = 0
   ships.length.times do |i|
+    if ships[i].damaged
+      damaged += 1
+      ships[i].remove 
+    end
     ships[i].draw(sensor: i.zero?)
     ships[i].update(borders, asteroids)
-    ships[i].remove if ships[i].damaged
   end
   asteroids.each do |asteroid|
-    asteroid.draw
     asteroid.update
   end
   visualizer.draw
-  ships = ships.reject(&:damaged)
-  if ships.length.zero? 
-    ships = Array.new(5) { Ship.new(Window.width / 2, Window.height / 2, 80, 50) }
-    visualizer.network = ships[0].brain 
+  if damaged == ships.length 
+    gen += 1
+    ships.each {|ship| ship.respawn(Window.width / 2, Window.height / 2)}
+    visualizer.init_network(ships[0].brain)
+    asteroids.each do |asteroid|
+      asteroid.respawn
+    end
   end
+  fps_display.text = "FPX:  #{get(:fps).round(2)}"
+  gen_display.text = "GEN: #{gen}"
 end
 
 on :key_up do |event|

@@ -2,15 +2,21 @@ require_relative './utils'
 
 
 class Visualizer
-  attr_accessor :network
   TOP = 10
   WIDTH = 150
   HEIGHT = 200
-  LEFT = 1200- WIDTH * 2
+  LEFT = 1200 - WIDTH - 10
+
   def initialize(network)
     @network = network
     @line_drawings = []
     @node_drawings = []
+  end
+
+  def init_network(network)
+    @network = network
+    @line_drawings = clear_drawings(@line_drawings)
+    @node_drawings = clear_drawings(@node_drawings)
   end
 
   def clear_drawings(drawings)

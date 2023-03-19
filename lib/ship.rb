@@ -3,8 +3,6 @@ require_relative './sensor'
 require_relative './network'
 
 IMG_PATH = 'assets/ship_green.png'.freeze
-# WIN_WIDTH = 1200
-# WIN_HEIGHT = 800
 
 class Ship < Image
   attr_accessor :controls
@@ -15,30 +13,33 @@ class Ship < Image
   FRICTION = 0.05
 
   def initialize(x, y, width, height, img_path: IMG_PATH)
-    # @x = x
-    # @y = y
-    # self.width = width
-    # self.height = height
-    super(img_path, x: x, y: y, width: width, height: height)
     @speed = 0
     self.rotate = 0
-
+    
     @damaged = false
-
+    @score = 0
     @controls = { forward: false, left: false, right: false }
     @rect = { x: x, y: y, width: width, height: height }
     @sensor = Sensor.new(self, ray_count: 10, ray_spread: Math::PI * 2)
     @brain = NeuralNetwork.new([@sensor.ray_count, 5, 3])
+    super(img_path, x: x, y: y, width: width, height: height)
+    @score_display = Text.new(0, x: self.x, y: self.y)
   end
 
   def draw(sensor: false)
+    return if @damaged
     @sensor.draw if sensor
     self.color = 'red' if @damaged
+    @score_display.text = @score.round(2)
     # Circle.new(x: @x + self.width /2 , y: @y + self.height /2, color: 'orange', radius: 20)
   end
 
   def angle_radians
     self.rotate * Math::PI / 180
+  end
+
+  def gene
+    @brain.layers 
   end
 
   def move
@@ -48,15 +49,22 @@ class Ship < Image
     self.rotate += 1 if @controls[:right]
     self.rotate -= 1 if @controls[:left]
 
-    @speed = [FRICTION * 3, @speed, MAX_SPEED].sort[1]
-    # @angle = [0, @angle, 360].sort[1]
+    @speed = [0, @speed, MAX_SPEED].sort[1]
     angle = angle_radians
     self.x += @speed * Math.sin(angle)
     self.y -= @speed * Math.cos(angle)
+    
   end
 
   def update(borders, asteroids)
     return if @damaged
+    @rect[:x] = self.x
+    @rect[:y] = self.y
+    @score_display.x = self.x 
+    @score_display.y = self.y
+    @score += @speed
+    @damaged = collides?(asteroids) || out_of_bound?
+    move
 
     @sensor.update(borders, asteroids)
 
@@ -66,10 +74,6 @@ class Ship < Image
     @controls[:left] = outputs[1] == 1
     @controls[:right] = outputs[2] == 1
 
-    move
-    @rect[:x] = self.x
-    @rect[:y] = self.y
-    @damaged = collides?(asteroids) || out_of_bound?
   end
 
   def out_of_bound?
@@ -86,5 +90,20 @@ class Ship < Image
       return true if rect_collide?(@rect, asteroid.rect)
     end
     false
+  end
+
+  def respawn(x, y)
+    add
+    self.x = x
+    self.y = y
+    @score_display.add 
+    @damaged = false
+    @sensor.init_drawings
+  end
+
+  def remove 
+    super
+    @score_display.remove 
+    @sensor.clear_drawings
   end
 end

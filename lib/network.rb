@@ -1,7 +1,7 @@
 require_relative './layer'
 
 class NeuralNetwork
-  attr_accessor :layers
+  attr_reader :layers
 
   def initialize(neuron_counts)
     @layers = []
