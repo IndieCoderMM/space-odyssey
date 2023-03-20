@@ -1,12 +1,18 @@
 require_relative './layer'
 
 class NeuralNetwork
-  attr_reader :layers
+  attr_accessor :layers
 
   def initialize(neuron_counts)
+    @neuron_counts = neuron_counts
     @layers = []
-    (0...neuron_counts.length - 1).each do |i|
-      @layers.push(Layer.new(neuron_counts[i], neuron_counts[i + 1]))
+    generate_layers
+  end
+
+  def generate_layers
+    @layers = []
+    (0...@neuron_counts.length - 1).each do |i|
+      @layers.push(Layer.new(@neuron_counts[i], @neuron_counts[i + 1]))
     end
   end
 

@@ -4,6 +4,8 @@
 class Asteroid < Image
   attr_reader :rect
   SIZE = 100
+  VX = 0
+  VY = 1
 
   def initialize
     img_path = "assets/meteor#{rand(1..4)}.png"
@@ -11,7 +13,7 @@ class Asteroid < Image
     y = 0
     super(img_path, x: x, y: y, width: SIZE, height: SIZE)
     @rect = { x: x, y: y, width: SIZE, height: SIZE }
-    @color = Color.new('random')
+    # @color = Color.new('random')
     @vx = 0
     @vy = 0
     respawn
@@ -19,10 +21,10 @@ class Asteroid < Image
 
   def respawn
     self.x = rand(WIN_WIDTH)
-    self.y = [-SIZE, WIN_HEIGHT + SIZE].sample
-    @vx = rand(-5..5)
-    @vy = rand(1..3)
-    @vy *= -1 if self.y > WIN_HEIGHT
+    self.y = WIN_HEIGHT / 2 - 100
+    @vx = VX
+    @vy = VY
+    # @vy *= -1 if self.y > WIN_HEIGHT
     @rect[:x] = self.x
     @rect[:y] = self.y
   end

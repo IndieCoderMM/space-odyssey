@@ -1,5 +1,5 @@
 require 'ruby2d'
-require_relative './lib/ship'
+require_relative './lib/population'
 require_relative './lib/asteroid'
 require_relative './lib/visualizer'
 
@@ -10,52 +10,59 @@ set title: 'Space Odyssey🚀', background: 'blue'
 set width: 1200, height: 800
 set fps_cap: 30
 
+LIFE_SPAN = 300
+
 borders = [
   [{ x: 10, y: 0 }, { x: 10, y: Window.height }],
   [{ x: Window.width - 10, y: 0 }, { x: Window.width - 10, y: Window.height }],
   [{ x: 10, y: 10 }, { x: Window.width - 10, y: 10 }],
   [{ x: 10, y: Window.height - 10 }, { x: Window.width - 10, y: Window.height - 10 }]
 ]
-ships = Array.new(50) { Ship.new(Window.width / 2, Window.height / 2, 80, 50) }
-asteroids = Array.new(10) { Asteroid.new }
-visualizer = Visualizer.new(ships[0].brain)
-gen = 1
+target = Image.new('assets/star_gold.png', x: Window.width/2, y: 50, width: 60, height: 60)
+
+population = Population.new(30, target.x, target.y)
+asteroids = Array.new(8) { Asteroid.new }
+visualizer = Visualizer.new(population.ship_model.brain)
 
 fps_display = Text.new("FPS: 30", x: 10, y: 10)
 gen_display = Text.new("GEN: 0", x: 10, y: 30)
+fitness_display = Text.new("FITNESS: 0", x: 10, y: 50)
+time_display = Text.new("Time: 0", x: 10, y: 70)
+rating_display = Text.new("Rating: 0", x: 10, y: 90)
+
+time = 0
 
 update do
-  damaged = 0
-  ships.length.times do |i|
-    if ships[i].damaged
-      damaged += 1
-      ships[i].remove 
-    end
-    ships[i].draw(sensor: i.zero?)
-    ships[i].update(borders, asteroids)
+  time += 1
+  if time == LIFE_SPAN
+    population.next_generation
+    time = 0
+    asteroids.each {|asteroid| asteroid.respawn}
   end
-  asteroids.each do |asteroid|
-    asteroid.update
-  end
-  visualizer.draw
-  if damaged == ships.length 
-    gen += 1
-    ships.each {|ship| ship.respawn(Window.width / 2, Window.height / 2)}
-    visualizer.init_network(ships[0].brain)
-    asteroids.each do |asteroid|
-      asteroid.respawn
-    end
-  end
-  fps_display.text = "FPX:  #{get(:fps).round(2)}"
-  gen_display.text = "GEN: #{gen}"
+  population.update(borders, asteroids, target)
+
+  model = population.ship_model
+  visualizer.draw(model.brain) if model 
+  model.sensor.draw if model
+
+  asteroids.each {|asteroid| asteroid.update}
+  
+  fps_display.text = "FPS:  #{get(:fps).round(2)}"
+  gen_display.text = "GEN: #{population.gen_no}"
+  fitness_display.text = "FITNESS: #{population.max_fit.round(3)}"
+  time_display.text = "TIME: #{time}"
+  rating_display.text = "Rating: #{population.success_rate}"
 end
 
 on :key_up do |event|
-  case event.key
+  case event.key 
+  when 'up'
+    asteroids << Asteroid.new 
   when 'down'
-    ships.each(&:jump)
-  when 'r'
-    ships = Array.new(5) { Ship.new(Window.width / 2, Window.height / 2, 80, 50) }
+    asteroid = asteroids.pop 
+    asteroid.remove
+  when 'left'
+    population.next_generation
   end
 end
 

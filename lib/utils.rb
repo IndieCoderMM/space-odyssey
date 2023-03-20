@@ -2,6 +2,11 @@ def lerp(a, b, t)
   a + ((b - a) * t)
 end
 
+def dist(x1, y1, x2, y2)
+  Math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+end
+
+
 # @params points [Hash] x, y coordinates of 2 lines
 def get_intersect(a, b, c, d)
   tTop = ((d[:x] - c[:x]) * (a[:y] - c[:y])) - ((d[:y] - c[:y]) * (a[:x] - c[:x]))
