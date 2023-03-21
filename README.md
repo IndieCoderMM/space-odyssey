@@ -2,83 +2,42 @@
 
 ## 📗 Table of Contents
 
-- [💎 Awesome Project](#-awesome-project)
-  - [🛠 Built With](#-built-with)
-    - [Tech Stack](#tech-stack)
-    - [Key Features](#key-features)
-  - [🚀 Live Demo](#-live-demo)
+- [🚀 Space Odyssey](#-space-odyssey)
+  - [Features](#features)
   - [💻 Getting Started](#-getting-started)
     - [Prerequisites](#prerequisites)
     - [Setup](#setup)
     - [Installation](#installation)
     - [Usage](#usage)
-    - [Run tests](#run-tests)
-    - [Deployment](#deployment)
-  - [👥 Authors](#-authors)
+  - [👨‍🚀 Author](#-author)
   - [🔭 Future Features](#-future-features)
   - [🤝 Contributing](#-contributing)
   - [💖 Show your support](#-show-your-support)
-  - [🙏 Acknowledgments](#-acknowledgments)
+  - [💎 Resources](#-resources)
   - [📜 License](#-license)
 
 
-# 💎 Awesome Project
+# 🚀 Space Odyssey
 
-> Describe your project in 1 or 2 sentences.
+This project is a simple implementation of genetic algorithm, simulated using Ruby2D graphic library.
 
-This is a template for **Ruby** projects.
+Every ship has sensors to detect the surrounding and a randomized neural network. Network controls the ship's movement based on the sensor's reading. Each generation is generated from best performers of the previous generation.
 
-## 🛠 Built With
-
-### Tech Stack
-
-> Describe the tech stack and include only the relevant sections that apply to your project.
-
-<details>
-  <summary>Client</summary>
-  <ul>
-    <li><a href="https://reactjs.org/">React.js</a></li>
-  </ul>
-</details>
-
-<details>
-  <summary>Server</summary>
-  <ul>
-    <li><a href="https://expressjs.com/">Express.js</a></li>
-  </ul>
-</details>
-
-<details>
-<summary>Database</summary>
-  <ul>
-    <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
-  </ul>
-</details>
-
-
-### Key Features
-
-> Describe between 1-3 key features of the application.
-
-- **[key_feature_1]**
-- **[key_feature_2]**
-- **[key_feature_3]**
+![Demo](demo.gif)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Features
 
-## 🚀 Live Demo
-
-> Add a link to your deployed project.
-
-- [Live Demo Link](https://google.com)
+- Collision detection
+- Ray casting for sensors
+- Network layers with random weights and biases
+- Network visualizer
+- Generation system
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 ## 💻 Getting Started
-
-> Describe how a new developer could make use of your project.
 
 To get a local copy up and running, follow these steps.
 
@@ -86,21 +45,13 @@ To get a local copy up and running, follow these steps.
 
 In order to run this project you need [Ruby](https://www.ruby-lang.org/en/) installed on your machine.
 
-<!--
-Example command:
-
-```sh
- gem install rails
-```
- -->
-
 ### Setup
 
 Clone this repository to your desired folder:
 
 ```sh
   cd my-project
-  git clone git@github.com:IndieCoderMM/awesome-project.git .
+  git clone git@github.com:IndieCoderMM/space-odyssey.git .
 ```
 
 ### Installation
@@ -108,74 +59,35 @@ Clone this repository to your desired folder:
 Install this project with:
 
 ```sh
-  gem install
+  bundle install
 ```
 
 ### Usage
 
-To run the project, execute the following command:
+To run the simulation, execute the following command:
 
-<!--
-Example command:
 
 ```sh
-  rails server
+  ruby main.rb
 ```
---->
-
-### Run tests
-
-To run tests, run the following command:
-
-<!--
-Example command:
-
-```sh
-  bin/rails test test/models/article_test.rb
-```
---->
-
-### Deployment
-
-You can deploy this project using:
-
-<!--
-Example:
-
-```sh
-
-```
- -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-## 👥 Authors
-
-> Mention all of the collaborators of this project.
-
-👨‍🚀 **Hein Thant**
+## 👨‍🚀 Author
 
 - GitHub: [@githubhandle](https://github.com/indiecodermm)
 - LinkedIn: [LinkedIn](https://linkedin.com/in/hthantoo)
 - Gmail: hthant00chk@gmail.com
-
-👤 **Author2**
-
-- GitHub: [@githubhandle](https://github.com/githubhandle)
-- Twitter: [@twitterhandle](https://twitter.com/twitterhandle)
-- LinkedIn: [LinkedIn](https://linkedin.com/in/linkedinhandle)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ## 🔭 Future Features 
 
-> Describe 1 - 3 features you will add to the project.
-
-- [ ] **[new_feature_1]**
-- [ ] **[new_feature_2]**
-- [ ] **[new_feature_3]**
+- [ ] Improve algorithm
+- [ ] Add shooting mechanic
+- [ ] Optimize code
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -196,9 +108,12 @@ If you like this project, please consider giving it a ⭐.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-## 🙏 Acknowledgments
+## 💎 Resources
 
-I would like to thank all code reviewers for making this project better.
+- [Self-Driving Car Tutorial](https://youtu.be/Rs_rAxEsAvI): Sensors, collision detection & neural network
+- [Smart Rockets by Coding Train](https://youtu.be/bGz7mv2vD6g): Genetic algorithm implementation
+- [Genetic Algorithm](https://youtu.be/9zfeTw-uFCw): Genetic algorithm explained
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
