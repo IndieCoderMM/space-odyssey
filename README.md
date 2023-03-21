@@ -3,7 +3,7 @@
 ## 📗 Table of Contents
 
 - [🚀 Space Odyssey](#-space-odyssey)
-  - [Features](#features)
+  - [🎯 Features](#-features)
   - [💻 Getting Started](#-getting-started)
     - [Prerequisites](#prerequisites)
     - [Setup](#setup)
@@ -19,7 +19,7 @@
 
 # 🚀 Space Odyssey
 
-This project is a simple implementation of genetic algorithm, simulated using Ruby2D graphic library.
+This project is a simple implementation of genetic algorithm, simulated using [Ruby2D](https://www.ruby2d.com/) graphic library.
 
 Every ship has sensors to detect the surrounding and a randomized neural network. Network controls the ship's movement based on the sensor's reading. Each generation is generated from best performers of the previous generation.
 
@@ -27,7 +27,7 @@ Every ship has sensors to detect the surrounding and a randomized neural network
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Features
+## 🎯 Features
 
 - Collision detection
 - Ray casting for sensors
