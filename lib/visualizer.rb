@@ -21,8 +21,8 @@ class Visualizer
   end
 
   def clear_drawings(drawings)
-    drawings.each {|d| d.remove}
-    return []
+    drawings.each(&:remove)
+    []
   end
 
   def draw(network)
@@ -31,7 +31,6 @@ class Visualizer
 
     draw_network(network)
   end
-
 
   def draw_network(network)
     layer_gap = WIDTH / network.layers.length
@@ -43,7 +42,6 @@ class Visualizer
   end
 
   def draw_layer(layer, pos_x, gap)
-    right = LEFT + WIDTH
     bottom = TOP + HEIGHT
 
     layer.inputs.length.times do |i|
@@ -51,21 +49,21 @@ class Visualizer
         @line_drawings << Line.new(
           x1: pos_x, y1: get_node_y(layer.inputs, i, TOP, bottom),
           x2: pos_x + gap, y2: get_node_y(layer.outputs, j, TOP, bottom),
-          color: [0.5, 0.8, 0.5, layer.weights[i][j] + 1 || 0]
+          color: [0.5, 0.8, 0.5, (layer.weights[i][j] + 1) || 0]
         )
       end
     end
 
     layer.inputs.length.times do |i|
       y = get_node_y(layer.inputs, i, TOP, bottom)
-      color = [1, 1, 0.3, layer&.inputs[i] || 0]
+      color = [1, 1, 0.3, layer&.inputs&.[](i) || 0]
       draw_node(5, pos_x, y, color)
     end
 
     layer.outputs.length.times do |i|
       y = get_node_y(layer.outputs, i, TOP, bottom)
-      color = [1, 1, 0.3, layer&.outputs[i] || 0]
-      draw_node(5, pos_x + gap, y, color )
+      color = [1, 1, 0.3, layer&.outputs&.[](i) || 0]
+      draw_node(5, pos_x + gap, y, color)
     end
   end
 

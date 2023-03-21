@@ -32,11 +32,11 @@ class Layer
     layer.outputs.length.times do |i|
       sum = 0
       layer.inputs.length.times do |j|
-        if layer.inputs[j] < -100
-          sum += 10 * layer.weights[j][i]
-        else
-          sum += layer.inputs[j] * layer.weights[j][i]
-        end
+        sum += if layer.inputs[j] < -100
+                 10 * layer.weights[j][i]
+               else
+                 layer.inputs[j] * layer.weights[j][i]
+               end
       end
 
       layer.outputs[i] = sum > layer.biases[i] ? 1 : 0

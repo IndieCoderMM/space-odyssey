@@ -15,13 +15,13 @@ class Sensor
   end
 
   def init_drawings
-    (@ray_count*2).times do |i|
+    (@ray_count * 2).times do |_i|
       @line_drawings << Line.new(x1: 0, y1: 0, x2: 0, y2: 0)
     end
   end
 
   def clear_drawings
-    @line_drawings.each {|line| line.remove}
+    @line_drawings.each(&:remove)
     @line_drawings = []
   end
 
@@ -72,7 +72,7 @@ class Sensor
         touches.push(value) if value
       end
     end
-    
+
     return nil if touches.length === 0
 
     offsets = touches.map { |t| t[:offset] }
@@ -85,25 +85,22 @@ class Sensor
     @line_drawings[index].x2 = x2
     @line_drawings[index].y1 = y1
     @line_drawings[index].y2 = y2
-    @line_drawings[index].color = color 
+    @line_drawings[index].color = color
   end
 
-
   def draw
-    return if @rays.length.zero?
+    return if @rays.empty?
 
     @ray_count.times do |i|
       end_point = @readings[i] || @rays[i][1]
       draw_line(i,
-        x1: @rays[i][0][:x], y1: @rays[i][0][:y],
-        x2: end_point[:x], y2: end_point[:y],
-        color: [1, 0.7, 0.5, 0.5]
-      )
+                x1: @rays[i][0][:x], y1: @rays[i][0][:y],
+                x2: end_point[:x], y2: end_point[:y],
+                color: [1, 0.7, 0.5, 0.5])
       draw_line(i + @ray_count,
-        x1: @rays[i][1][:x], y1: @rays[i][1][:y],
-        x2: end_point[:x], y2: end_point[:y],
-        color: 'red'
-      )
+                x1: @rays[i][1][:x], y1: @rays[i][1][:y],
+                x2: end_point[:x], y2: end_point[:y],
+                color: 'red')
     end
   end
 end

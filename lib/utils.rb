@@ -3,19 +3,18 @@ def lerp(a, b, t)
 end
 
 def dist(x1, y1, x2, y2)
-  Math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+  Math.sqrt(((x2 - x1)**2) + ((y2 - y1)**2))
 end
-
 
 # @params points [Hash] x, y coordinates of 2 lines
 def get_intersect(a, b, c, d)
-  tTop = ((d[:x] - c[:x]) * (a[:y] - c[:y])) - ((d[:y] - c[:y]) * (a[:x] - c[:x]))
-  uTop = ((c[:y] - a[:y]) * (a[:x] - b[:x])) - ((c[:x] - a[:x]) * (a[:y] - b[:y]))
+  t_top = ((d[:x] - c[:x]) * (a[:y] - c[:y])) - ((d[:y] - c[:y]) * (a[:x] - c[:x]))
+  u_top = ((c[:y] - a[:y]) * (a[:x] - b[:x])) - ((c[:x] - a[:x]) * (a[:y] - b[:y]))
   bottom = ((d[:y] - c[:y]) * (b[:x] - a[:x])) - ((d[:x] - c[:x]) * (b[:y] - a[:y]))
 
   if bottom != 0
-    t = tTop / bottom
-    u = uTop / bottom
+    t = t_top / bottom
+    u = u_top / bottom
     return { x: lerp(a[:x], b[:x], t), y: lerp(a[:y], b[:y], t), offset: t } if t >= 0 && t <= 1 && u >= 0 && u <= 1
   end
   nil

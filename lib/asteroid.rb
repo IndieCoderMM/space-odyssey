@@ -3,6 +3,7 @@
 
 class Asteroid < Image
   attr_reader :rect
+
   SIZE = 100
   VX = 2
   VY = 1
@@ -21,12 +22,12 @@ class Asteroid < Image
 
   def respawn
     self.x = rand(WIN_WIDTH)
-    self.y = [-self.height, WIN_HEIGHT + self.height].sample
+    self.y = [-height, WIN_HEIGHT + height].sample
     @vx = rand(-VX..VX)
     @vy = VY
-    @vy *= -1 if self.y > WIN_HEIGHT
-    @rect[:x] = self.x
-    @rect[:y] = self.y
+    @vy *= -1 if y > WIN_HEIGHT
+    @rect[:x] = x
+    @rect[:y] = y
   end
 
   def update
