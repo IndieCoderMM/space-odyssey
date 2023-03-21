@@ -2,7 +2,7 @@ require_relative "./ship"
 
 class Population
   attr_reader :max_fit, :gen_no
-    def initialize(size, target_x, target_y)
+    def initialize(size)
         @size = size
         @fleet = []
         @genes = []
@@ -10,11 +10,11 @@ class Population
         @total_succeeded = 0
         @gen_no = 1
         @max_fit = 0
-        init_ships(size, target_x, target_y)
+        init_ships(size)
     end
 
-    def init_ships(size, target_x, target_y)
-        @fleet = Array.new(size) { Ship.new(target_x: target_x, target_y: target_y) }
+    def init_ships(size)
+        @fleet = Array.new(size) { Ship.new }
     end
 
     def success_rate
@@ -50,11 +50,11 @@ class Population
       # puts @genes.length
     end
 
-    def update(borders, asteroids, target)
+    def update(borders, asteroids)
       @total_damaged = 0
       @fleet.each do |ship|
         ship.draw
-        ship.update(borders, asteroids, target)
+        ship.update(borders, asteroids)
         if ship.damaged
           @total_damaged += 1
           ship.destroy 

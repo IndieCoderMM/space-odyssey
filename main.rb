@@ -3,14 +3,14 @@ require_relative './lib/population'
 require_relative './lib/asteroid'
 require_relative './lib/visualizer'
 
-WIN_WIDTH = 1200
-WIN_HEIGHT = 800
+WIN_WIDTH = 800
+WIN_HEIGHT = 640
 
 set title: 'Space Odyssey🚀', background: 'blue'
-set width: 1200, height: 800
-set fps_cap: 30
+set width: WIN_WIDTH, height: WIN_HEIGHT
+set fps_cap: 60
 
-LIFE_SPAN = 300
+LIFE_SPAN = 500
 
 borders = [
   [{ x: 10, y: 0 }, { x: 10, y: Window.height }],
@@ -18,14 +18,13 @@ borders = [
   [{ x: 10, y: 10 }, { x: Window.width - 10, y: 10 }],
   [{ x: 10, y: Window.height - 10 }, { x: Window.width - 10, y: Window.height - 10 }]
 ]
-target = Image.new('assets/star_gold.png', x: Window.width/2, y: 50, width: 60, height: 60)
 
-population = Population.new(30, target.x, target.y)
-asteroids = Array.new(8) { Asteroid.new }
+population = Population.new(20)
+asteroids = Array.new(5) { Asteroid.new }
 visualizer = Visualizer.new(population.ship_model.brain)
 
-fps_display = Text.new("FPS: 30", x: 10, y: 10)
-gen_display = Text.new("GEN: 0", x: 10, y: 30)
+fps_display = Text.new("FPS: 30", x: 10, y: 30)
+gen_display = Text.new("GEN: 0", x: 10, y: 10)
 fitness_display = Text.new("FITNESS: 0", x: 10, y: 50)
 time_display = Text.new("Time: 0", x: 10, y: 70)
 rating_display = Text.new("Rating: 0", x: 10, y: 90)
@@ -34,12 +33,12 @@ time = 0
 
 update do
   time += 1
-  if time == LIFE_SPAN
-    population.next_generation
+  if population.all_destroyed? || time >= LIFE_SPAN
     time = 0
+    population.next_generation
     asteroids.each {|asteroid| asteroid.respawn}
   end
-  population.update(borders, asteroids, target)
+  population.update(borders, asteroids)
 
   model = population.ship_model
   visualizer.draw(model.brain) if model 
@@ -47,11 +46,11 @@ update do
 
   asteroids.each {|asteroid| asteroid.update}
   
-  fps_display.text = "FPS:  #{get(:fps).round(2)}"
+  fps_display.text = "FPS:  #{get(:fps).round(0)}"
   gen_display.text = "GEN: #{population.gen_no}"
   fitness_display.text = "FITNESS: #{population.max_fit.round(3)}"
   time_display.text = "TIME: #{time}"
-  rating_display.text = "Rating: #{population.success_rate}"
+  rating_display.text = "Rating: #{population.success_rate.round(2)}"
 end
 
 on :key_up do |event|

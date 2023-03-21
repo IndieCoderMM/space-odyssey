@@ -25,11 +25,11 @@ class Sensor
     @line_drawings = []
   end
 
-  def update(borders, asteroids, target)
+  def update(borders, asteroids)
     cast_rays
     @readings = []
     @rays.length.times do |i|
-      @readings.push(get_reading(@rays[i], borders, asteroids, target))
+      @readings.push(get_reading(@rays[i], borders, asteroids))
     end
   end
 
@@ -54,7 +54,7 @@ class Sensor
   # @param borders [Array of 4 lines]
   # @param asteroids [Array of asteroids]
   # @return intersect point with min offset -> {x, y, offset}
-  def get_reading(ray, borders, asteroids, target)
+  def get_reading(ray, borders, asteroids)
     touches = []
 
     borders.length.times do |i|
@@ -72,17 +72,7 @@ class Sensor
         touches.push(value) if value
       end
     end
-
-    target_rect = {x: target.x, y: target.y, width: target.width, height: target.height}
-    collision_points = convert_rect_to_points(target_rect)
-    collision_points.length.times do |i|
-      value = get_intersect(
-        ray[0], ray[1],
-        collision_points[i], collision_points[(i+1) % collision_points.length]
-      )
-      touches.push({x: value[:x], y: value[:y], offset: value[:offset] * -100}) if value
-    end
-
+    
     return nil if touches.length === 0
 
     offsets = touches.map { |t| t[:offset] }

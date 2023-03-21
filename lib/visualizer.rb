@@ -1,11 +1,12 @@
 require_relative './utils'
+require 'pry'
 
 
 class Visualizer
-  TOP = 10
+  TOP = 20
   WIDTH = 150
   HEIGHT = 200
-  LEFT = 1200 - WIDTH - 10
+  LEFT = 800 - WIDTH - 20
 
   def initialize(network)
     @line_drawings = []
@@ -57,13 +58,14 @@ class Visualizer
 
     layer.inputs.length.times do |i|
       y = get_node_y(layer.inputs, i, TOP, bottom)
-      color = layer.inputs[i] < -10 ? "red" : [1, 1, 0.3, layer.inputs[i]]
-      draw_node(5, pos_x, y, color || 0)
+      color = [1, 1, 0.3, layer&.inputs[i] || 0]
+      draw_node(5, pos_x, y, color)
     end
 
     layer.outputs.length.times do |i|
       y = get_node_y(layer.outputs, i, TOP, bottom)
-      draw_node(5, pos_x + gap, y, [1, 1, 0.3, layer&.outputs[i] || 0])
+      color = [1, 1, 0.3, layer&.outputs[i] || 0]
+      draw_node(5, pos_x + gap, y, color )
     end
   end
 
