@@ -73,7 +73,7 @@ class Sensor
       end
     end
 
-    return nil if touches.length === 0
+    return nil if touches.empty?
 
     offsets = touches.map { |t| t[:offset] }
     min_offset = offsets.min

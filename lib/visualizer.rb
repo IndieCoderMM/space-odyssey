@@ -1,6 +1,4 @@
 require_relative './utils'
-require 'pry'
-
 
 class Visualizer
   TOP = 20

@@ -25,7 +25,7 @@ visualizer = Visualizer.new(population.ship_model.brain)
 
 fps_display = Text.new('FPS: 30', x: 10, y: 30)
 gen_display = Text.new('GEN: 0', x: 10, y: 10)
-fitness_display = Text.new('FITNESS: 0', x: 10, y: 50)
+fitness_display = Text.new('FIT: 0', x: 10, y: 50)
 time_display = Text.new('Time: 0', x: 10, y: 70)
 rating_display = Text.new('Rating: 0', x: 10, y: 90)
 

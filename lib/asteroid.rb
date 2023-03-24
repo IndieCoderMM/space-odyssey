@@ -1,6 +1,3 @@
-# WIN_WIDTH = 1200
-# WIN_HEIGHT = 800
-
 class Asteroid < Image
   attr_reader :rect
 
@@ -14,7 +11,6 @@ class Asteroid < Image
     y = 0
     super(img_path, x: x, y: y, width: SIZE, height: SIZE)
     @rect = { x: x, y: y, width: SIZE, height: SIZE }
-    # @color = Color.new('random')
     @vx = 0
     @vy = 0
     respawn

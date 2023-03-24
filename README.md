@@ -23,7 +23,7 @@ This project is a simple implementation of genetic algorithm, simulated using [R
 
 Every ship has sensors to detect the surrounding and a randomized neural network. Network controls the ship's movement based on the sensor's reading. Each generation is generated from best performers of the previous generation.
 
-![Demo](demo.gif)
+<img src="./demo.gif" width=540 height=380 alt="demo_simulation" />
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -31,7 +31,7 @@ Every ship has sensors to detect the surrounding and a randomized neural network
 
 - Collision detection
 - Ray casting for sensors
-- Network layers with random weights and biases
+- Neural network layers
 - Network visualizer
 - Generation system
 

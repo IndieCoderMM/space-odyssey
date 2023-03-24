@@ -27,8 +27,7 @@ class Population
   end
 
   def next_generation
-    @max_fit = get_max_fitness
-
+    find_max_fitness
     collect_genes
 
     @fleet.each(&:destroy)
@@ -66,14 +65,13 @@ class Population
     @total_damaged >= @fleet.length
   end
 
-  def get_max_fitness
-    max_fit = 0
+  def find_max_fitness
+    @max_fit = 0
     @total_succeeded = 0
     @fleet.each do |ship|
       ship.evaluate_fitness
-      max_fit = ship.fitness if ship.fitness > max_fit
+      @max_fit = ship.fitness if ship.fitness > max_fit
       @total_succeeded += 1 if ship.success
     end
-    max_fit
   end
 end
